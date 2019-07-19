@@ -7,7 +7,7 @@ class Navbar extends Component {
         className="navbar navbar-expand-sm navbar-light"
         style={{ backgroundColor: "#e3f2fd" }}
       >
-        <div class="container-fluid">
+        <div>
           {" "}
           <a
             className="navbar-brand"
