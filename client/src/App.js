@@ -5,10 +5,13 @@ import Landing from "./components/landing";
 import Register from "./components/register";
 import Login from "./components/login";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import {Provider} from 'react-redux';
+import store from './store';
 
 class App extends Component {
   render() {
     return (
+      <Provider store={store}>
       <Router>
         <React.Fragment>
           <Navbar />
@@ -19,6 +22,7 @@ class App extends Component {
           </main>
         </React.Fragment>
       </Router>
+      </Provider>
     );
   }
 }
