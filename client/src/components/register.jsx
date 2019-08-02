@@ -1,4 +1,9 @@
 import React, { Component } from "react";
+import { Link, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { registerUser } from "../actions/authActions";
+import classnames from "classnames";
 
 class Register extends Component {
   constructor() {
@@ -14,11 +19,18 @@ class Register extends Component {
       errors: {}
     };
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
+  }
 
   onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
-  onSubmit = e => {
+  onSubmit = e => { 
     e.preventDefault();
     const newUser = {
       firstname: this.state.firstname,
@@ -27,13 +39,15 @@ class Register extends Component {
       date_birth: this.state.date_birth,
       email: this.state.email,
       password: this.state.password,
-      password2: this.state.password_confirm
+      password_confirm: this.state.password_confirm
     };
     console.log(newUser);
+    this.props.registerUser(newUser, this.props.history); 
   };
+  
   render() {
     return (
-      <React.Fragment>
+      <div className="container">
         <div className="row justify-content-center ml-5 my-3">
           <div className="col-md-8">
             <a
@@ -41,7 +55,7 @@ class Register extends Component {
               className="btn-flat wave-effect"
               style={{ fontSize: 25 }}
             >
-              <i class="fas fa-arrow-circle-left mr-2" />
+              <i className="fas fa-arrow-circle-left mr-2" />
               Back to home
             </a>
           </div>
@@ -55,7 +69,7 @@ class Register extends Component {
                 </h2>
               </div>
               <div className="card-body mb-3">
-                <form action="" className="role">
+                <form action="" onSubmit={this.onSubmit} className="role">
                   <div className="row">
                     <div className="col">
                       <div className="form-group">
@@ -155,7 +169,7 @@ class Register extends Component {
                     </div>
                   </div>
                   <div className="form-group form-control-lg">
-                    <button className="btn btn-lg btn-primary btn-block" type="submit" onSubmit={this.onSubmit}>
+                    <button type="submit" className="btn btn-lg btn-primary btn-block" >
                       Sign up
                     </button>
                   </div>
@@ -164,9 +178,21 @@ class Register extends Component {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }
 
-export default Register;
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(withRouter(Register));

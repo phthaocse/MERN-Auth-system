@@ -13,6 +13,7 @@ module.exports = function validateRegisterInput(data) {
   data.password_confirm = !isEmpty(data.password_confirm)
     ? data.password_confirm
     : "";
+  console.log(data.lastname);
   //first name and last name check
   if (Validator.isEmpty(data.firstname))
     errors.firstname = "First Name field is required";

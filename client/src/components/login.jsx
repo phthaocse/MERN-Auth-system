@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { loginUser } from "../actions/authActions";
+import classnames from "classnames";
 class Login extends Component {
   constructor() {
     super();
@@ -9,7 +12,13 @@ class Login extends Component {
       errors: {}
     };
   }
-
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
+  }
   onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
@@ -20,6 +29,8 @@ class Login extends Component {
       password: this.state.password
     };
     console.log(userData);
+    this.props.loginUser(userData);
+    
   };
   render() {
     return (
@@ -45,7 +56,7 @@ class Login extends Component {
                 </h3>
               </div>
               <div className="card-body mb-3">
-                <form action="" className="role">
+                <form action="" onSubmit={this.onSubmit} className="role">
                   <div className="form-group">
                     <input
                       onChange={this.onChange}
@@ -89,4 +100,18 @@ class Login extends Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(Login);
